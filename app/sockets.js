@@ -6,14 +6,14 @@ var _ = require('underscore'),
     config = require('./config');
     http = require('http'),
     spawn = require('child_process').spawn,
-    follow = spawn('tail', ['-f', 'sample.log']);
+    follow = spawn('tail', ['-f', 'sample.log']),
+    geoip = require('geoip-lite');
 
 exports.boot = function (io, config) {
 
     io.sockets.on('connection', function (socket) {
 
         console.log('connection');
-
         start(socket);
 
         socket.on('disconnect', function () {
@@ -22,25 +22,16 @@ exports.boot = function (io, config) {
 
     });
 
-    var emit = function emitF(poller) {
-            if (!poller.cache || mustDie(poller)) {
-                console.log('die');
-                return;
-            }
-            var listeners = 0;
-            _.each(poller.listeners, function (socket) {
-                socket.emit(poller.url, poller.cache);
-                listeners++;
-            });
-            log.log('info', 'sockets', '☄', '[' + poller.type + ']', 'emitted new data to ' + listeners + ' listeners');
-        },
-        start = function startF(socket){
-            console.log('emitting');
+    var start = function startF(socket) {
             follow.stdout.on('data', function (data) {
                 data = data.toString();
-                console.log('emitted');
-                console.log(data);
-                socket.emit('news', data);
+                /\b((?:[0-9]{1,3}\.){3}[0-9]{1,3})\b/.test(data);
+                //var ip = RegExp.$1;
+                var ip = '207.97.227.239';
+                var geo = geoip.lookup(ip);
+                if (geo) {
+                    socket.emit('ping', geo.ll);
+                }
             });
             follow.on('close', function (code) {
                 console.log('exit with code: ' + code);

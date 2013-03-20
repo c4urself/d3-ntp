@@ -123,9 +123,9 @@ function clip(d) {
   return path(circle.clip(d));
 }
 
-    var socket = io.connect('http://localhost');
-    socket.on('news', function (data) {
-        console.log('enws');
+    var socket = io.connect('');
+    socket.on('ping', function (data) {
+        console.log('received ping');
         console.log(data);
     });
 
