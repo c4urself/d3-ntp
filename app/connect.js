@@ -1,5 +1,4 @@
-var connect = require('connect'),
-    fs = require('fs');
+var connect = require('connect');
 
 exports.boot = function (app, config, env) {
 
