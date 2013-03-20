@@ -8,7 +8,7 @@
 WEB_SOCKET_DEBUG = true;
 
 // socket.io specific code
-var socket = io.connect('http://localhost:8080/latlon');
+var socket = io.connect('/latlon');
 
 socket.on('connect', function () {
 	$('#data').addClass('connected');

@@ -99,7 +99,7 @@ window.ntp = window.ntp || {
 
     listen: function listenF() {
         var that = this;
-        var socket = io.connect('latlon');
+        var socket = io.connect('/latlon');
         socket.on('latlon', function pingReceived(lat, lon) {
             drawCircle([lat, lon]);
         });
