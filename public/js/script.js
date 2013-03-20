@@ -58,10 +58,10 @@ window.ntp = window.ntp || {
         var that = this;
 
         this.projection = d3.geo.azimuthal()
-            .scale(380)
-            .origin([-71.03,42.37])
+            .scale(500)
+            .origin([-73.74, 45.66]) // Center on montreal
             .mode('orthographic')
-            .translate([640, 400]);
+            .translate([500, 500]);
 
         this.circle = d3.geo.greatCircle()
             .origin(this.projection.origin());
@@ -70,20 +70,21 @@ window.ntp = window.ntp || {
             .projection(this.projection);
 
         this.svg = d3.select('#body').append('svg:svg')
-            .attr('width', 1280)
+            .attr('width', 980)
             .attr('height', 800)
             .on('mousedown', function (d) {that.mouseDown.apply(that);});
 
         d3.json('world-countries.json', function (collection) {
-            console.log('asdf');
             that.feature = that.svg.selectAll('path')
                 .data(collection.features)
                 .enter()
                 .append('svg:path')
                 .attr('d', function (d) {return that.clip.apply(that, [d]);});
 
+            /*
             that.feature.append('svg:title')
                 .text(function(d) { return d.properties.name; });
+            */
         });
 
         this.bindMouseEvents();
@@ -105,16 +106,19 @@ window.ntp = window.ntp || {
         });
 
         var drawCircle = function drawCircleF(d) {
+            var coord = that.projection([d[1], d[0]]);
             var c = that.svg.append('circle')
                 .data([d])
-                .attr('r', 20)
-                .attr('fill', 'red')
+                .attr('r', 4)
                 .attr('cx', function cxF(d) {
-                    return that.projection(d)[1];
+                    return coord[0];
                 })
-            .attr('cy', function cyF(d) {
-                return that.projection(d)[0];
-            });
+                .attr('cy', function cyF(d) {
+                    return coord[1];
+                })
+                .attr('stroke','red')
+                .attr('fill','red');
+
             setTimeout(function destroyCircle() {
                 c.remove();
             }, 100);
