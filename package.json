@@ -1,0 +1,21 @@
+{
+  "name": "ntp-d3",
+  "version": "0.0.0",
+  "description": "NTP D3.js demo test",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:c4urself/d3-ntp.git"
+  },
+  "author": "",
+  "license": "BSD",
+  "dependencies": {
+    "express": "~3.1.0",
+    "socket.io": "~0.9.13",
+    "underscore": "~1.4.4",
+    "geoip-lite": "~1.0.10"
+  }
+}
