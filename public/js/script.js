@@ -103,6 +103,9 @@ window.ntp = window.ntp || {
         socket.on('latlon', function pingReceived(lat, lon) {
             drawCircle([lat, lon]);
         });
+	socket.on('qps', function qpsReceived(qps) {
+            document.getElementById("qps").innerHTML = qps;
+        });
 
         var drawCircle = function drawCircleF(d) {
             var coord = that.projection([d[1], d[0]]);

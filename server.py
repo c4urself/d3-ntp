@@ -1,3 +1,4 @@
+import datetime
 import errno
 import fcntl
 import re
@@ -60,6 +61,8 @@ def generate_data(local_addresses):
                          stderr=subprocess.STDOUT)
     fcntl.fcntl(p.stdout, fcntl.F_SETFL, os.O_NONBLOCK)
     chunk = None
+    queries = 0
+    last_qps_update = datetime.datetime.now()
     while True:
         socket.wait_read(p.stdout.fileno())
         try:
@@ -81,6 +84,14 @@ def generate_data(local_addresses):
         src, dest = match.groups()
         if src not in local_addresses:
             continue
+
+        queries += 1
+        now = datetime.datetime.now()
+        if (now - last_qps_update).total_seconds() > 10:
+            dt = now - last_qps_update
+            last_qps_update = now
+            MapNamespace.send('qps', float(queries) / dt.total_seconds())
+            queries = 0
 
         try:
             record = gi.record_by_addr(dest)

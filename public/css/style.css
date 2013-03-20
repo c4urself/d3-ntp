@@ -102,3 +102,10 @@ path {
   fill: #aaa;
   stroke: #fff;
 }
+
+#textdata {
+  position: absolute;
+  right: 0px;
+  width: 200px;
+  height: 100%;
+}

@@ -2,7 +2,7 @@
 <html>
   <head>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-    <script type="text/javascript" src="socket.io.js"></script>
+    <script type="text/javascript" src="js/socket.io.js"></script>
     <script>    
 
 WEB_SOCKET_DEBUG = true;
@@ -11,33 +11,37 @@ WEB_SOCKET_DEBUG = true;
 var socket = io.connect('/latlon');
 
 socket.on('connect', function () {
-	$('#data').addClass('connected');
-	message('Connected');
+	message("#status", 'Connected');
 });
 
 socket.on('reconnecting', function () {
-    message('Attempting to re-connect to the server');
+    message("#status", 'Attempting to re-connect to the server');
 });
 socket.on('reconnect', function () {
-    $('#data').addClass('connected');
+	message("#status", "Connected");
 });
 
 socket.on('error', function (e) {
-    message(e ? e : 'A unknown error occurred');
+    message("#status", e ? e : 'A unknown error occurred');
 });
 
 socket.on('latlon', function (lat, lon) {
-    message("" + lat + ", " + lon);
+    message("#location", "" + lat + ", " + lon);
 });	
 
-function message (msg) {
-    $('#data').html($('<p>').append(msg));
+socket.on('qps', function (qps) {
+	message("#qps", qps);
+});
+
+function message (id, msg) {
+    $(id).html(msg);
 }
 
     </script>
   </head>
 <body>
-  <div id="data">
-  </div>
+	<div><b>Status:</b> <span id="status"></span></div>
+	<div><b>Recent query:</b> <span id="location"></span></div>
+	<div><b>QPS:</b> <span id="qps"></span></div>
 </body>
 </html>
