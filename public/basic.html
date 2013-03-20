@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script type="text/javascript" src="socket.io.js"></script>
+    <script>    
+
+WEB_SOCKET_DEBUG = true;
+
+// socket.io specific code
+var socket = io.connect('http://localhost:8080/latlon');
+
+socket.on('connect', function () {
+	$('#data').addClass('connected');
+	message('Connected');
+});
+
+socket.on('reconnecting', function () {
+    message('Attempting to re-connect to the server');
+});
+socket.on('reconnect', function () {
+    $('#data').addClass('connected');
+});
+
+socket.on('error', function (e) {
+    message(e ? e : 'A unknown error occurred');
+});
+
+socket.on('latlon', function (lat, lon) {
+    message("" + lat + ", " + lon);
+});	
+
+function message (msg) {
+    $('#data').html($('<p>').append(msg));
+}
+
+    </script>
+  </head>
+<body>
+  <div id="data">
+  </div>
+</body>
+</html>
