@@ -32,9 +32,11 @@ class MapNamespace(BaseNamespace):
 
     def recv_connect(self):
         self.sockets.add(self.socket)
+        MapNamespace.send('viewers', len(self.sockets))
 
     def recv_disconnect(self):
         self.sockets.discard(self.socket)
+        MapNamespace.send('viewers', len(self.sockets))
 
 
 # Flask routes

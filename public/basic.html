@@ -33,6 +33,10 @@ socket.on('qps', function (qps) {
 	message("#qps", qps);
 });
 
+socket.on('viewers', function (viewers) {
+	message("#viewers", viewers);
+});
+
 function message (id, msg) {
     $(id).html(msg);
 }
@@ -43,5 +47,6 @@ function message (id, msg) {
 	<div><b>Status:</b> <span id="status"></span></div>
 	<div><b>Recent query:</b> <span id="location"></span></div>
 	<div><b>QPS:</b> <span id="qps"></span></div>
+	<div><b>Viewers:</b> <span id="viewers"></span></div>
 </body>
 </html>

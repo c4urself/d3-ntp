@@ -106,6 +106,9 @@ window.ntp = window.ntp || {
 	socket.on('qps', function qpsReceived(qps) {
             document.getElementById("qps").innerHTML = qps;
         });
+        socket.on('viewers', function viewersReceived(viewers) {
+            document.getElementById("viewers").innerHTML = viewers;
+        });
 
         var drawCircle = function drawCircleF(d) {
             var coord = that.projection([d[1], d[0]]);
