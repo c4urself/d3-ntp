@@ -56,7 +56,7 @@ def run_socketio(path):
 
 def generate_data(local_addresses):
     gi = pygeoip.GeoIP('/usr/share/GeoIP/GeoIPCity.dat', pygeoip.MEMORY_CACHE)
-    args = ['tcpdump', '-i', 'eth0', '-s', '64', '-n', 'udp src port 123']
+    args = ['tcpdump', '-l', '-i', 'eth0', '-s', '64', '-n', 'udp src port 123']
     p = subprocess.Popen(args,
                          stdin=subprocess.PIPE,
                          stdout=subprocess.PIPE,
