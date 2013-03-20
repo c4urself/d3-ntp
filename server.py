@@ -42,7 +42,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return send_file('public/basic.html')
+    return send_file('public/index.html')
 
 
 @app.route("/socket.io/<path:path>")
