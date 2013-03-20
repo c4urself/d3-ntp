@@ -9,21 +9,14 @@ var _ = require('underscore'),
     follow = spawn('tail', ['-f', 'sample.log']),
     geoip = require('geoip-lite');
 
-exports.boot = function (io, config) {
+exports.boot = function bootF(io, config) {
 
-    io.sockets.on('connection', function (socket) {
-
-        console.log('connection');
+    io.sockets.on('connection', function onSocketConnectionF(socket) {
         start(socket);
-
-        socket.on('disconnect', function () {
-            console.log('disconnected');
-        });
-
     });
 
     var start = function startF(socket) {
-            follow.stdout.on('data', function (data) {
+            follow.stdout.on('data', function onDataF(data) {
                 data = data.toString();
                 /\b((?:[0-9]{1,3}\.){3}[0-9]{1,3})\b/.test(data);
                 //var ip = RegExp.$1;
@@ -33,7 +26,7 @@ exports.boot = function (io, config) {
                     socket.emit('ping', geo.ll);
                 }
             });
-            follow.on('close', function (code) {
+            follow.on('close', function onCloseF(code) {
                 console.log('exit with code: ' + code);
             });
         };
