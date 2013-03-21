@@ -1,5 +1,4 @@
 
-
 window.ntp = window.ntp || {
 
     timeout: 100,
@@ -7,17 +6,9 @@ window.ntp = window.ntp || {
     o0: null,
     countries: {},
 
-    scale: {
-        orthographic: 380,
-        stereographic: 380,
-        gnomonic: 380,
-        equidistant: 380 / Math.PI * 2,
-        equalarea: 380 / Math.SQRT2
-    },
-
     mouseDown: function mouseDownF() {
         this.m0 = [d3.event.pageX, d3.event.pageY];
-        this.o0 = this.projection.origin();
+        this.o0 = this.projection.rotate();
         d3.event.preventDefault();
     },
 
@@ -27,11 +18,10 @@ window.ntp = window.ntp || {
         var mouseMove = function mouseMoveF() {
             if (that.m0) {
                 var m1 = [d3.event.pageX, d3.event.pageY],
-                    o1 = [that.o0[0] + (that.m0[0] - m1[0]) / 8, that.o0[1] + (m1[1] - that.m0[1]) / 8];
+                    o1 = [that.o0[0] - (that.m0[0] - m1[0]) / 8, that.o0[1] - (m1[1] - that.m0[1]) / 8];
 
-                that.projection.origin(o1);
-                that.circle.origin(o1)
-                that.refresh();
+                that.projection.rotate(o1);
+                that.svg.selectAll("path").attr("d", that.path);
             }
         };
 
@@ -49,24 +39,17 @@ window.ntp = window.ntp || {
 
     refresh: function refreshF(duration) {
         var that = this;
-        (duration ? this.feature.transition().duration(duration) : this.feature).attr('d', function (d) {return that.clip.apply(that, [d])});
-    },
-
-    clip: function clipF(d) {
-        return this.path(this.circle.clip(d));
+        (duration ? this.feature.transition().duration(duration) : this.feature);
     },
 
     start: function startF() {
         var that = this;
 
-        this.projection = d3.geo.azimuthal()
-            .scale(500)
-            .origin([-73.74, 45.66]) // Center on montreal
-            .mode('orthographic')
-            .translate([500, 500]);
-
-        this.circle = d3.geo.greatCircle()
-            .origin(this.projection.origin());
+        this.projection = d3.geo.orthographic()
+            .scale(400)
+	    .translate([490, 400])
+	    .clipAngle(90)
+	    .rotate([73.74, -45.66])
 
         this.path = d3.geo.path()
             .projection(this.projection);
@@ -81,12 +64,7 @@ window.ntp = window.ntp || {
                 .data(collection.features)
                 .enter()
                 .append('svg:path')
-                .attr('d', function (d) {return that.clip.apply(that, [d]);});
-
-            /*
-            that.feature.append('svg:title')
-                .text(function(d) { return d.properties.name; });
-            */
+		.attr("d", that.path)
         });
 
         this.bindMouseEvents();
@@ -108,7 +86,7 @@ window.ntp = window.ntp || {
             drawCircle([lat, lon]);
 
             // add country
-            addCountry(countryName);
+            //addCountry(countryName);
 
         });
         socket.on('qps', function qpsReceived(qps) {
@@ -137,24 +115,13 @@ window.ntp = window.ntp || {
         };
 
         var drawCircle = function drawCircleF(d) {
-            var coord = that.projection([d[1], d[0]]);
-            var c = that.svg.append('circle')
-                .data([d])
-                .attr('r', 0)
-                .attr('cx', function cxF(d) {
-                    return coord[0];
-                })
-                .attr('cy', function cyF(d) {
-                    return coord[1];
-                })
-                .attr('stroke', 'red')
-                .attr('fill', 'red');
-
-            c.transition().attr('r', 5);
-
-            setTimeout(function tweenCircle() {
-                c.remove();
-            }, that.timeout);
+		var c = d3.geo.circle()
+               		.origin([d[1], d[0]])
+			.angle(0.5);
+		that.svg.append("path")
+			.datum(c())
+			.attr("class", "points")
+			.attr("d", that.path);
         };
     }
 };
