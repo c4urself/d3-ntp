@@ -102,18 +102,14 @@ window.ntp = window.ntp || {
     listen: function listenF() {
         var that = this;
         var socket = io.connect('http://zeit.rcloran.net:8080/latlon');
-        socket.on('latlon', function pingReceived(lat, lon) {
+        socket.on('latlon', function pingReceived(lat, lon, countryName) {
+
+            // draw circle for each hit
             drawCircle([lat, lon]);
-            var countries = that.countries;
-            if (!that.countries[country_name]) {
-                that.countries[country_name] = 0;
-            }
-            that.countries[country_name] += 1;
-            var country_text = "";
-            for (var c in countries) {
-                country_text += (c + ": " + countries[c] + "<br>");
-            }
-            document.getElementById("countries").innerHTML = country_text;
+
+            // add country
+            addCountry(countryName);
+
         });
         socket.on('qps', function qpsReceived(qps) {
             document.getElementById("qps").innerHTML = qps;
@@ -121,6 +117,24 @@ window.ntp = window.ntp || {
         socket.on('viewers', function viewersReceived(viewers) {
             document.getElementById("viewers").innerHTML = viewers;
         });
+
+        var addCountry = function addCountryF(countryName) {
+            var name = countryName.replace(/[\s,]/g, '-').toLowerCase(),
+                count = that.countries[name],
+                $container = $('#countries'),
+                $div;
+
+            if (!count) {
+                that.countries[name] = 0;
+                $div = $('<div class="' + name + '">' + countryName + ': <span></span></div>');
+                $container.append($div);
+            } else {
+                $div = $('.' + name, $container);
+            }
+
+            count = that.countries[name] += 1;
+            $('span', $div).html(count);
+        };
 
         var drawCircle = function drawCircleF(d) {
             var coord = that.projection([d[1], d[0]]);
