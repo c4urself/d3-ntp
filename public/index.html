@@ -12,21 +12,23 @@
         <title>NTP</title>
     </head>
     <body>
-        <div id="textdata">
-            <label>Milliseconds</label>
-            <select id="ms">
-                <option value="100">100</option>
-                <option value="200">200</option>
-                <option value="500">500</option>
-                <option value="1000">1000</option>
-            </select>
-            <dl>
-                <dt>QPS</dt><dd id="qps">Waiting...</dd>
-                <dt>Viewers</dt><dd id="viewers">Waiting...</dd>
-                <dt>Countries</dt><dd id="countries"></dd>
-            </dl>
+        <div class="page">
+            <div id="map"></div>
+            <div id="textdata">
+                <label>Milliseconds</label>
+                <select id="ms">
+                    <option value="100">100</option>
+                    <option value="200">200</option>
+                    <option value="500">500</option>
+                    <option value="1000">1000</option>
+                </select>
+                <dl>
+                    <dt>QPS</dt><dd id="qps">Waiting...</dd>
+                    <dt>Viewers</dt><dd id="viewers">Waiting...</dd>
+                    <dt>Countries</dt><dd id="countries"></dd>
+                </dl>
+            </div>
         </div>
-        <div id="body"></div>
         <script type="text/javascript" src="js/script.js"></script>
     </body>
 </html>

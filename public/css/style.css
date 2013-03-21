@@ -1,11 +1,15 @@
 body {
   background: url(../img/texture-noise.png);
-  overflow: hidden;
   margin: 0;
   font-size: 14px;
   font-family: "Helvetica Neue", Helvetica;
 }
 
+
+.page {
+    margin: 10px auto;
+    width: 980px;
+}
 #chart, #header, #footer {
   position: absolute;
   top: 0;
@@ -50,27 +54,6 @@ line {
   stroke-width: 1.5px;
 }
 
-.string, .regexp {
-  color: #f39;
-}
-
-.keyword {
-  color: #00c;
-}
-
-.comment {
-  color: #777;
-  font-style: oblique;
-}
-
-.number {
-  color: #369;
-}
-
-.class, .special {
-  color: #1181B8;
-}
-
 a:link, a:visited {
   color: #000;
   text-decoration: none;
@@ -80,32 +63,27 @@ a:hover {
   color: #666;
 }
 
-.hint {
-  position: absolute;
-  right: 0;
-  width: 1280px;
-  font-size: 12px;
-  color: #999;
-}
-
 svg {
-  width: 1280px;
-  height: 800px;
   pointer-events: all;
 }
 
 circle {
-  fill: #dbe4f0;
+  fill: blue;
 }
 
-path {
+path.countries {
   fill: #aaa;
   stroke: #fff;
 }
 
+path.points {
+  fill: red;
+  stroke: orange;
+}
+
 #textdata {
   position: absolute;
-  right: 0px;
-  width: 200px;
-  height: 100%;
+  top: 0px;
+  left: 0px;
+  padding: 20px;
 }
