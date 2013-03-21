@@ -99,7 +99,8 @@ def generate_data(local_addresses):
             record = gi.record_by_addr(dest)
             if record:
                 MapNamespace.send('latlon',
-                                  record['latitude'], record['longitude'])
+                                  record['latitude'], record['longitude'],
+                                  record['country_name'])
         except:
             continue
 

@@ -4,6 +4,7 @@ window.ntp = window.ntp || {
 
     m0: null,
     o0: null,
+    countries: {},
 
     scale: {
         orthographic: 380,
@@ -100,8 +101,19 @@ window.ntp = window.ntp || {
     listen: function listenF() {
         var that = this;
         var socket = io.connect('/latlon');
-        socket.on('latlon', function pingReceived(lat, lon) {
+        socket.on('latlon', function pingReceived(lat, lon, country_name) {
             drawCircle([lat, lon]);
+	    var countries = that.countries;
+	    console.log(countries);
+            if (!countries[country_name]) {
+                countries[country_name] = 0;
+            }
+            countries[country_name] += 1;
+	    var country_text = "";
+	    for (var c in countries) {
+country_text += (c + ": " + countries[c] + "<br>");
+            }
+            document.getElementById("countries").innerHTML = country_text;
         });
 	socket.on('qps', function qpsReceived(qps) {
             document.getElementById("qps").innerHTML = qps;
