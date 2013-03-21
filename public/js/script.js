@@ -2,6 +2,7 @@
 
 window.ntp = window.ntp || {
 
+    timeout: 100,
     m0: null,
     o0: null,
     countries: {},
@@ -90,9 +91,9 @@ window.ntp = window.ntp || {
 
         this.bindMouseEvents();
 
-        d3.select('select').on('change', function() {
-            that.projection.mode(this.value).scale(that.scale[this.value]);
-            that.refresh(750);
+        d3.select('select').on('change', function () {
+            that.timeout = this.value;
+            console.log(that.timeout);
         });
 
         ntp.listen();
@@ -100,22 +101,21 @@ window.ntp = window.ntp || {
 
     listen: function listenF() {
         var that = this;
-        var socket = io.connect('/latlon');
-        socket.on('latlon', function pingReceived(lat, lon, country_name) {
+        var socket = io.connect('http://zeit.rcloran.net:8080/latlon');
+        socket.on('latlon', function pingReceived(lat, lon) {
             drawCircle([lat, lon]);
-	    var countries = that.countries;
-	    console.log(countries);
-            if (!countries[country_name]) {
-                countries[country_name] = 0;
+            var countries = that.countries;
+            if (!that.countries[country_name]) {
+                that.countries[country_name] = 0;
             }
-            countries[country_name] += 1;
-	    var country_text = "";
-	    for (var c in countries) {
-country_text += (c + ": " + countries[c] + "<br>");
+            that.countries[country_name] += 1;
+            var country_text = "";
+            for (var c in countries) {
+                country_text += (c + ": " + countries[c] + "<br>");
             }
             document.getElementById("countries").innerHTML = country_text;
         });
-	socket.on('qps', function qpsReceived(qps) {
+        socket.on('qps', function qpsReceived(qps) {
             document.getElementById("qps").innerHTML = qps;
         });
         socket.on('viewers', function viewersReceived(viewers) {
@@ -126,21 +126,25 @@ country_text += (c + ": " + countries[c] + "<br>");
             var coord = that.projection([d[1], d[0]]);
             var c = that.svg.append('circle')
                 .data([d])
-                .attr('r', 4)
+                .attr('r', 0)
                 .attr('cx', function cxF(d) {
                     return coord[0];
                 })
                 .attr('cy', function cyF(d) {
                     return coord[1];
                 })
-                .attr('stroke','red')
-                .attr('fill','red');
+                .attr('stroke', 'red')
+                .attr('fill', 'red');
 
-            setTimeout(function destroyCircle() {
+            c.transition().attr('r', 5);
+
+            setTimeout(function tweenCircle() {
                 c.remove();
-            }, 100);
+            }, that.timeout);
         };
     }
 };
 
-ntp.start();
+$(document).ready(function () {
+    ntp.start();
+});
