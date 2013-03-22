@@ -1,12 +1,12 @@
 d3-ntp
 ======
 
-NTP D3.js demo test
+This shows NTP server hits on a globe. The globe is generated via the excellent [D3.js](http://d3js.org/) library and messages are passed to the client via [socket.io](http://socket.io/). 
 
+Both a [Node.js](http://nodejs.org/) and a [gevent](http://www.gevent.org/) version of the server exist for comparison. 
 
-setup
------
+Node.JS Setup
+-------------
 
 - `npm install`
-- `cp data/* node_modules/geoip-lite/data/`
 - `node server.js`
