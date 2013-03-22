@@ -11,6 +11,10 @@ body {
     width: 980px;
 }
 
+h1, h2 {
+    text-align: center;
+}
+
 #textdata {
   position: absolute;
   top: 0px;

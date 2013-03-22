@@ -152,4 +152,7 @@ window.ntp = window.ntp || {
 
 $(document).ready(function () {
     ntp.start();
+    setInterval(function showTimeF() {
+        $('.page h2').html(new Date().toUTCString());
+    }, 1000);
 });
