@@ -21,7 +21,7 @@ window.ntp = window.ntp || {
                     o1 = [that.o0[0] - (that.m0[0] - m1[0]) / 8, that.o0[1] - (m1[1] - that.m0[1]) / 8];
 
                 that.projection.rotate(o1);
-                that.svg.selectAll("path").attr("d", that.path);
+                that.svg.selectAll('path.country').attr('d', that.path);
             }
         };
 
@@ -49,23 +49,46 @@ window.ntp = window.ntp || {
             .scale(300)
             .translate([490, 400])
             .clipAngle(90)
-            .rotate([73.74, -45.66])
+            .rotate([73.74, -45.66]);
 
-            this.path = d3.geo.path()
+        // path representing the projection
+        this.path = d3.geo.path()
             .projection(this.projection);
 
+        //this.graticule = d3.geo.graticule();
+
+        // add svg
         this.svg = d3.select('#map').append('svg:svg')
             .attr('width', 800)
             .attr('height', 800)
             .on('mousedown', function (d) {that.mouseDown.apply(that);});
 
+        // render countries
         d3.json('world-countries.json', function loadCountriesF(collection) {
             that.feature = that.svg.selectAll('path')
             .data(collection.features)
             .enter()
             .append('svg:path')
-            .attr('d', that.path);
+            .attr('d', that.path)
+            .attr('class', 'country');
         });
+
+        // render blue 'globe'
+        this.svg.append('path')
+            .datum({type: 'Sphere'})
+            .attr('class', 'globe')
+            .attr('d', this.path);
+
+        // render 'lat/long' lines
+        /*
+        this.svg.append('g')
+            .attr('class', 'graticule')
+            .selectAll('path')
+            .data(this.graticule.lines)
+            .enter()
+            .append('path')
+            .attr('d', this.path);
+        */
 
         this.bindMouseEvents();
 
@@ -103,9 +126,8 @@ window.ntp = window.ntp || {
 
                 var p = that.svg.append('path')
                     .datum(c())
-                    .attr('class', 'points');
-
-                p.attr('stroke', 'red').attr('d', that.path);
+                    .attr('class', 'points')
+                    .attr('d', that.path);
 
                 setTimeout(function removeCircleF() {
                     p.remove();

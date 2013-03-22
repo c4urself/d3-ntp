@@ -1,3 +1,4 @@
+/* LAYOUT */
 body {
   background: url(../img/texture-noise.png);
   margin: 0;
@@ -5,62 +6,23 @@ body {
   font-family: "Helvetica Neue", Helvetica;
 }
 
-
 .page {
     margin: 10px auto;
     width: 980px;
 }
-#chart, #header, #footer {
+
+#textdata {
   position: absolute;
-  top: 0;
+  top: 0px;
+  left: 0px;
+  padding: 20px;
 }
 
-#header, #footer {
-  z-index: 1;
-  display: block;
-  font-size: 36px;
-  font-weight: 300;
-  text-shadow: 0 1px 0 #fff;
-}
 
-#header.inverted, #footer.inverted {
-  color: #fff;
-  text-shadow: 0 1px 4px #000;
-}
-
-#header {
-  top: 80px;
-  left: 140px;
-  width: 1000px;
-}
-
-#footer {
-  top: 680px;
-  right: 140px;
-  text-align: right;
-}
-
-rect {
-  fill: none;
-  pointer-events: all;
-}
-
-pre {
-  font-size: 18px;
-}
-
+/* SVG */
 line {
   stroke: #000;
   stroke-width: 1.5px;
-}
-
-a:link, a:visited {
-  color: #000;
-  text-decoration: none;
-}
-
-a:hover {
-  color: #666;
 }
 
 svg {
@@ -80,10 +42,15 @@ path.points {
   fill: red;
   stroke: orange;
 }
+path.globe {
+  fill: #a4bac7;
+}
+g.graticule {
+  fill: none;
+  stroke: #fff;
+  stroke-width: .5px;
+}
 
-#textdata {
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  padding: 20px;
+g.graticule :nth-child(2n) {
+  stroke-dasharray: 2,2;
 }
