@@ -5,6 +5,8 @@ This shows NTP server hits on a globe. The globe is generated via the excellent 
 
 Both a [Node.js](http://nodejs.org/) and a [gevent](http://www.gevent.org/) version of the server exist for comparison. 
 
+Find an example [here](http://zeit.rcloran.net:8080)
+
 Node.JS Setup
 -------------
 
